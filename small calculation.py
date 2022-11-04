@@ -24,8 +24,8 @@ z_reduced=np.asarray([3.7087,2.5543,4.342,5.29795,4.24,4.768,4.7,4.407,4.7,4.12,
 type_reduced=np.asarray(["DSFG","SMG","SMG","SMG","SMG","SMG","SMG","QSO","QSO","QSO","QSO","QSO"])
 
 nitrogen_line_luminosity=np.asarray([ufloat(7.5e7,2e7),ufloat(7.0e8,0.7e8),ufloat(2.14e8,0.23e8),ufloat(2.0e8,0.9e8),
-                                    ufloat(1.54e9,0.12e9),ufloat(1.06e9,0.15e9),ufloat(6.1e8,0.5e8),ufloat(4.4e8,0.4e8),ufloat(3.97e8,0.3e8),
-                                     ufloat(5.7e8,2.1e8),ufloat(1.11e9,0.30e9),ufloat(8.2e8,1.1e8)])
+                                    ufloat(1.54e9,0.12e9)/20,ufloat(1.06e9,0.15e9)/ufloat(5.7,0.5),ufloat(6.1e8,0.5e8),ufloat(4.4e8,0.4e8),ufloat(3.97e8,0.3e8),
+                                     ufloat(5.7e8,2.1e8)/ufloat(5.3,0.3),ufloat(1.11e9,0.30e9)/80,ufloat(8.2e8,1.1e8)/20])
 
 nitrogen_FWHM=np.asarray([ufloat(611.9961821753315,165.66828877047436),ufloat(750.4640017248616,63.79647223941275),
                           ufloat(374.6595074546333,43.81585606973786),ufloat(684.6079623818567,294.51606096402105),
@@ -39,7 +39,7 @@ print(f"{source_reduced.shape[0]} : {nitrogen_line_luminosity.shape[0]} : {nitro
 
 
 
-carbon_line_luminosity=np.asarray([ufloat(8.4e8,1.0e8),ufloat(0,0),ufloat(7.8e9,1.1e9),ufloat(6.69e9,0.23e9),ufloat(61.6e9,9.8e9),ufloat(21e9,4e9),
+carbon_line_luminosity=np.asarray([ufloat(8.4e8,1.0e8),ufloat(0,0),ufloat(7.8e9,1.1e9),ufloat(6.69e9,0.23e9),ufloat(61.6e9,9.8e9)/20,ufloat(21e9,4e9)/ufloat(5.7,0.5),
                    ufloat(10.0e9,1.5e9),ufloat(16.4e9,2.6e9),ufloat(6.5e9,1.0e9),ufloat(1.7e9,1e9),ufloat(0,0),ufloat(0,0)])
 
 carbon_FWHM=np.asarray([ufloat(781,292),ufloat(0,0),ufloat(366,0),ufloat(421,19),ufloat(690,80),ufloat(212,43),
@@ -48,12 +48,12 @@ carbon_FWHM=np.asarray([ufloat(781,292),ufloat(0,0),ufloat(366,0),ufloat(421,19)
 
 
 IR_luminosities=np.asarray([ufloat(1.1e12,0.4e12),ufloat(1.1e13,0.2e13),ufloat(1.9e13,0.3e13),ufloat(2.8e13,0),
-                            ufloat(5.4e12,0.3e12),ufloat(6.4e13,1e13),ufloat(6.7e13,0),ufloat(49.6e12,3.8e12),
-                            ufloat(5.0e13,0),ufloat(17.8e12,1.7e12),ufloat(16.0e12,0.4e12),ufloat(10.2e12,1e12)])
+                            ufloat(5.4e12,0.3e12)/20,ufloat(6.4e13,1e13)/ufloat(5.7,0.5),ufloat(6.7e13,0),ufloat(49.6e12,3.8e12),
+                            ufloat(5.0e13,0),ufloat(17.8e12,1.7e12)/ufloat(5.3,0.3),ufloat(16.0e12,0.4e12)/80,ufloat(10.2e12,1e12)/20])
 
 FIR_luminosities = np.asarray([ufloat(0.67e12,0.25e12),ufloat(8.2e12,1.5e12),ufloat(6.6e12,1.0e12),ufloat(1.1e13,0.6e13),
-                             ufloat(4.3e12,0.2e12),ufloat(3.9e13,0.6e13),ufloat(2.4e13,0),ufloat(3.1e13,0),ufloat(2.3e13,0),
-                             ufloat(5.3e12,0.5e12),ufloat(3.6e12,0.1e12),ufloat(5e12,0.5e12)])
+                             ufloat(4.3e12,0.2e12)/20,ufloat(3.9e13,0.6e13)/ufloat(5.7,0.5),ufloat(2.4e13,0),ufloat(3.1e13,0),ufloat(2.3e13,0),
+                             ufloat(5.3e12,0.5e12)/ufloat(5.3,0.3),ufloat(3.6e12,0.1e12)/80,ufloat(5e12,0.5e12)/20])
 
 
 
@@ -510,8 +510,8 @@ print("")
 print(r'$log\frac{L_{[NII]}}{L_{FIR}}$ vs $logL_{FIR}$')
 for i in range(NLL_FIR.shape[0]):
     print(f"{i+1}) {source_reduced[i]} : {np.log10(NLL_FIR[i].n)} : {np.log10(FIR_luminosities[i].n)}")
-plt.errorbar(np.log10(FIR_luminosities_SMG_nominal_value),np.log10(NLL_FIR_SMG_nominal_value),yerr=0,fmt='s',ecolor='grey',color='orange',capsize=5,label='SMG')
-plt.errorbar(np.log10(FIR_luminosities_QSO_nominal_value),np.log10(NLL_FIR_QSO_nominal_value),yerr=0,fmt='*',ecolor='grey',color='red',capsize=5,label='QSO')
+plt.errorbar(np.log10(FIR_luminosities_SMG_nominal_value),np.log10(NLL_FIR_SMG_nominal_value),fmt='s',color='orange',capsize=5,label='SMG')
+plt.errorbar(np.log10(FIR_luminosities_QSO_nominal_value),np.log10(NLL_FIR_QSO_nominal_value),fmt='*',color='red',capsize=5,label='QSO')
 plt.xlabel(r'$logL_{FIR}$')
 plt.ylabel(r'$log\frac{L_{[NII]}}{L_{FIR}}$')
 plt.legend()
@@ -656,8 +656,8 @@ def histogram_redshift():
     z_SMG = np.asarray([2.5543, 4.342, 5.29795, 4.24, 4.768, 4.7])
     z_QSO = np.asarray([4.407, 4.7, 4.12, 7.5413, 3.991, 3.93])
     fig, ax = plt.subplots(figsize=(10, 7))
-    ax.hist(z_SMG, f, ec="black", color="orange", label="SMG")
-    ax.hist(z_QSO, f, ec="black", color="red", label="QSO")
+    ax.hist(z_SMG, f, ec="black", color="orange", alpha=0.5, label="SMG")
+    ax.hist(z_QSO, f, ec="black", color="red", alpha=0.5, label="QSO")
     plt.xlabel("Redshift")
     plt.ylabel("Number of Galaxies")
     plt.legend()

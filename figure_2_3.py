@@ -545,6 +545,11 @@ P_19_N_IR = P_19_N/P_19_IR
 
 
 
+
+
+#
+
+
 """print("")
 print(P_19_N_IR/1e-5)
 print(P_19_N_IR[0].s/(P_19_N_IR[0].n * np.log(10)))
@@ -556,8 +561,9 @@ exit()"""
 
 P_18_n = np.asarray([ufloat(49e7,10e7)])
 P_18_IR = np.asarray([ufloat(3.2e13,0.3e13)])
-P_18_c_n = np.asarray([ufloat(930,100)/P_18_n])
+P_18_c_n = np.asarray([ufloat(930e7,100e7)/P_18_n[0]])
 P_18_n_IR = P_18_n/P_18_IR
+
 
 
 
@@ -629,3 +635,195 @@ plt.xlim(9.3,14.2)
 plt.ylim(-5.6,-3.4)
 #plt.title(r'$log\frac{L_{[NII]}}{L_{IR}}$ vs $logL_{IR}$')
 plt.show()
+
+
+
+
+#######################################################################################################################
+#[CII]/[NII]
+
+
+ir_smg_2 = np.asarray([ufloat(1.1e12, 0.4e12),
+    ufloat(1.1e13, 0.2e13),
+    ufloat(1.9e13, 0.3e13),
+    ufloat(2.8e13, 0),
+    ufloat(6.4e13, 1.0e13) / ufloat(5.7, 0.5),
+    ufloat(6.7e13, 0)])
+
+ir_qso_2 = np.asarray([ufloat(5e13, 0),
+    ufloat(49.6e12, 3.8e12) * (1 - 0.29)])
+
+ir_smg_2_nom = []
+ir_qso_2_nom = []
+
+for i in range(len(ir_smg_2)):
+    ir_smg_2_nom.append(ir_smg_2[i].n)
+
+
+for i in range(len(ir_qso_2)):
+    ir_qso_2_nom.append(ir_qso_2[i].n)
+
+ir_smg_2_nom = np.asarray(ir_smg_2_nom)
+ir_qso_2_nom = np.asarray(ir_qso_2_nom)
+
+nll_smg_2 = np.asarray([ufloat(7.5e7, 2e7),
+                                       ufloat(7.0e8, 0.7e8) / ufloat(14.7, 0.3),
+                                       ufloat(2.14e8, 0.23e8),
+                                       ufloat(2.0e8, 0.9e8),
+                                       ufloat(1.06e9, 0.15e9) / ufloat(5.7, 0.5),
+                                       ufloat(6.1e8, 0.5e8),
+                                        ])
+
+nll_qso_2 = np.asarray([ufloat(3.97e8, 0.3e8),ufloat(4.4e8, 0.4e8)])
+
+cll_smg=np.asarray([ufloat(8.4e8,1.0e8), #Hyde
+                                   ufloat(0,0),         #9io9
+                                   ufloat(7.8e9,1.1e9), #A-1
+                                   ufloat(6.69e9,0.23e9),#A-3
+                                                             #ID141
+                                   ufloat(21e9,4e9)/ufloat(5.7,0.5), #SPT
+                                                             #MM
+                                   ufloat(10.0e9,1.5e9), #BR1202-N
+                                    ])
+
+cll_qso = np.asarray([ufloat(6.5e9,1.0e9),ufloat(16.4e9,2.6e9)])
+
+cll_nll_smg_nominal = []
+cll_nll_qso_nominal = []
+
+cll_nll_smg_error = []
+cll_nll_qso_error = []
+
+cll_nll_smg = cll_smg/nll_smg_2
+cll_nll_qso = cll_qso/nll_qso_2
+
+for i in range(len(cll_nll_smg)):
+    cll_nll_smg_nominal.append(cll_nll_smg[i].n)
+    cll_nll_smg_error.append(cll_nll_smg[i].s)
+
+for i in range(len(cll_nll_qso)):
+    cll_nll_qso_nominal.append(cll_nll_qso[i].n)
+    cll_nll_qso_error.append(cll_nll_qso[i].s)
+
+cll_nll_smg_nominal = np.asarray(cll_nll_smg_nominal)
+cll_nll_qso_nominal = np.asarray(cll_nll_qso_nominal)
+cll_nll_smg_error = np.asarray(cll_nll_smg_error)
+cll_nll_qso_error = np.asarray(cll_nll_qso_error)
+
+
+
+#Sources in Paper
+
+cll_pdbi_smg = np.asarray([ufloat(0,0),ufloat(1.6e9,0),ufloat(61.6e9,9.8e9)/5.8])
+print(cll_pdbi_smg/1e9) #Values are the same in the paper
+
+cll_pdbi_qso = np.asarray([ufloat(1.8e9,1e9)])
+
+cll_new_qso = np.asarray([ufloat(3.36e9,0.12e9),ufloat(8.31e9,0.41e9)])
+
+
+
+cll_nll_pdbi_smg = cll_pdbi_smg/nll_pdbi_smg
+cll_nll_pdbi_qso = cll_pdbi_qso/nll_pdbi_qso
+cll_nll_new_qso = cll_new_qso/nll_new_qso
+
+
+"""******************************************************************************************************************"""
+
+
+
+data_lu = np.loadtxt(r"/home/sai/Desktop/local_galaxies/lu_daiz_c_n.csv",delimiter=',')
+data_malhotra_c_n = np.loadtxt(r"/home/sai/Desktop/local_galaxies/malhotra_c_n.csv",delimiter=',')
+
+ir_data_lu = []
+r_data_lu = []
+
+print(data_lu.shape[0])
+
+
+
+for i in range(data_lu.shape[0]):
+    ir_data_lu.append(data_lu[i][0])
+    r_data_lu.append(data_lu[i][1])
+
+
+ir_data_malhotra_c_n = []
+r_data_malhotra_c_n = []
+
+for i in range(data_malhotra_c_n.shape[0]):
+    ir_data_malhotra_c_n.append(data_malhotra_c_n[i][0])
+    r_data_malhotra_c_n.append(data_malhotra_c_n[i][1])
+
+
+"""plt.scatter(ir_data_lu,r_data_lu,marker='^',color='green')
+plt.scatter(ir_data_malhotra_c_n,r_data_malhotra_c_n,marker='^',color='green')
+plt.show()"""
+
+
+
+
+"""******************************************************************************************************************"""
+
+
+
+plt.errorbar(np.log10(ir_smg_2_nom),np.log10(cll_nll_smg_nominal),yerr=(cll_nll_smg_error/(cll_nll_smg_nominal * np.log(10))),fmt='s',color='orange',capsize=3,label='SMG')
+plt.errorbar(np.log10(ir_qso_2_nom),np.log10(cll_nll_qso_nominal),yerr=(cll_nll_qso_error/(cll_nll_qso_nominal * np.log(10))),fmt='s',color='red',capsize=3,label='QSO')
+
+
+plt.errorbar(np.log10(ir_pdbi_smg_nominal[1]),np.log10(cll_nll_pdbi_smg[1].n),yerr=np.nanmean(cll_nll_smg_error/(cll_nll_smg_nominal * np.log(10))),lolims=True,fmt='*',color='orange',ecolor='grey',capsize=5,markersize=20)
+plt.errorbar(np.log10(ir_pdbi_smg_nominal[2]),np.log10(cll_nll_pdbi_smg[2].n),yerr=cll_nll_pdbi_smg[2].s/(cll_nll_pdbi_smg[2].n * np.log(10)),fmt='*',color='orange',ecolor='grey',capsize=5,markersize=20)
+plt.errorbar(np.log10(ir_pdbi_qso_nominal),np.log10(cll_nll_pdbi_qso[0].n),yerr=cll_nll_pdbi_qso[0].s/(cll_nll_pdbi_qso[0].n * np.log(10)) - 0.17,uplims=True,fmt='*',color='red',ecolor='grey',markersize=20)
+plt.errorbar(np.log10(ir_new_qso[0].n),np.log10(cll_nll_new_qso[0].n),yerr=(cll_nll_new_qso[0].s/(cll_nll_new_qso[0].n*np.log(10))) + 0.12,fmt='*',lolims=True,color='red',ecolor='grey',capsize=5,markersize=20)
+plt.errorbar(np.log10(ir_new_qso[1].n),np.log10(cll_nll_new_qso[1].n),yerr=(cll_nll_new_qso[1].s/(cll_nll_new_qso[1].n*np.log(10))) + 0.12,fmt='*',lolims=True,color='red',ecolor='grey',capsize=5,markersize=20)#,markersize=15
+
+
+
+
+#local galaxies
+plt.errorbar(ir_data_lu,r_data_lu,color='green',fmt='^',label=f'Diaz-Santos+17\nLu+17, Malhotra+01')
+plt.errorbar(ir_data_malhotra_c_n,r_data_malhotra_c_n,color='green',fmt='^')
+
+
+
+#Pavesi
+plt.errorbar(np.log10(P_19_IR[0].n),np.log10(P_19_c_n[0].n),color='darkblue',fmt='^',label=f'Pavesi+18,19')
+plt.errorbar(np.log10(P_19_IR[1].n),np.log10(P_19_c_n[1].n),color='darkblue',fmt='^')
+plt.errorbar(np.log10(P_19_IR[2].n),np.log10(P_19_c_n[2].n),color='darkblue',fmt='^')
+plt.errorbar(np.log10(P_19_IR[3].n),np.log10(P_19_c_n[3].n),color='darkblue',fmt='^')
+
+plt.errorbar(np.log10(P_18_IR[0].n),np.log10(P_18_c_n[0].n),color='darkblue',fmt='^')
+
+
+err_P_19_18_C_N = ((P_19_c_n[0].s/(P_19_c_n[0].n * np.log(10))) + (P_19_c_n[1].s/(P_19_c_n[1].n * np.log(10))) + (P_19_c_n[2].s/(P_19_c_n[2].n * np.log(10))) + (P_19_c_n[3].s/(P_19_c_n[3].n * np.log(10))) +( P_18_c_n[0].s/(P_18_c_n[0].n * np.log(10))))/5
+plt.errorbar(9.7,0.25,yerr=err_P_19_18_C_N,color="darkblue",elinewidth=2,capthick=2,capsize=5)
+plt.errorbar(9.5,0.25,yerr=err_P_19_18_C_N/2.5,color="green",elinewidth=2,capthick=2,capsize=5)
+plt.plot([9,10],[0.45,0.45],color='black',linewidth=2)
+plt.plot([10,10],[0.45,0],color='black',linewidth=2)
+
+
+plt.text(np.log10(ir_pdbi_smg_nominal[1]) + 0.015,np.log10(cll_nll_pdbi_smg[1].n)-0.095, "HDF850.1", fontsize="xx-large")
+plt.text(np.log10(ir_pdbi_smg_nominal[2]) + 0.04,np.log10(cll_nll_pdbi_smg[2].n)+0.02,"ID141",fontsize="xx-large")
+plt.text(np.log10(ir_pdbi_qso_nominal) - 0.6,np.log10(cll_nll_pdbi_qso[0].n) + 0.02,"PSSJ2322",fontsize="xx-large")
+plt.text(np.log10(ir_new_qso[0].n) + 0.017,np.log10(cll_nll_new_qso[0].n) + 0.029,"J2054",fontsize="xx-large")
+plt.text(np.log10(ir_new_qso[1].n) + 0.017,np.log10(cll_nll_new_qso[1].n) + 0.029,"J2310",fontsize="xx-large")
+
+
+
+
+plt.xlabel(r' $logL_{IR}$',fontsize=30)#,fontsize=14
+plt.ylabel(r' $log(L_{[CII]}/L_{[NII]})$',fontsize=30)
+#plt.xticks([12.25,12.75,13.25,13.75],['12.25','12.75','13.20','13.75'])#fontsize=12
+plt.xticks(fontsize=25)
+plt.yticks(fontsize=25)
+plt.legend(loc='upper left',fontsize=18)
+plt.xlim(9.3,14.2)
+plt.ylim(0.11,2.1)
+
+plt.axhspan(np.log10(2), np.log10(4), color='green', alpha=0.2, lw=0)
+plt.axhspan(np.log10(10), 2.2, color='red', alpha=0.2, lw=0)
+plt.text(12.5,0.41,"HII region",color='green',fontsize=25) #,fontsize=16
+plt.text(12.3,1.95,"PDR/XDR/Shock",color='red',fontsize=25)
+
+#plt.title(r' $log\frac{L_{[CII]}}{L_{[NII]}}$ vs  $logL_{IR}$')
+plt.show()
+
